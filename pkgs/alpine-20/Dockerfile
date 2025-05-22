@@ -1,7 +1,7 @@
 FROM node:20-alpine AS node
 FROM alpine:3.19
 
-LABEL author="Ashu" maintainer="Matheusn.biolowons@gmail.com"
+LABEL author="Slyvok" maintainer="slyvok@gmail.com"
 ENV PHP_VERSION="82"
 
 COPY --from=node /usr/lib /usr/lib
