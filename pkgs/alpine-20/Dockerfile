@@ -1,70 +1,43 @@
-FROM node:20-alpine AS node
-FROM alpine:3.19
+#
+# Copyright (c) 2021 Matthew Penner
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
 
-LABEL author="Slyvok" maintainer="slyvok@gmail.com"
-ENV PHP_VERSION="82"
+FROM        alpine:latest
 
-COPY --from=node /usr/lib /usr/lib
-COPY --from=node /usr/local/share /usr/local/share
-COPY --from=node /usr/local/lib /usr/local/lib
-COPY --from=node /usr/local/include /usr/local/include
-COPY --from=node /usr/local/bin /usr/local/bin
+LABEL       author="Ashu" maintainer="Matheusn.biolowons@gmail.com"
 
-RUN apk add --no-cache --virtual=build-dependencies --upgrade \
-    ca-certificates \
-    wget \
-    jq \
-    tar \
-    curl \
-    nginx \
-    unzip \
-    git \
-    bash \
-    ca-certificates \
-    yarn
-# build
+LABEL       org.opencontainers.image.licenses=MIT
 
-RUN echo "**** Instalação dos php${PHP_VERSION} ****" && \
-    apk add --no-cache --update \
-    php${PHP_VERSION} \
-    php${PHP_VERSION}-bcmath \
-    php${PHP_VERSION}-cli \
-    php${PHP_VERSION}-common \
-    php${PHP_VERSION}-dom \
-    php${PHP_VERSION}-curl \
-    php${PHP_VERSION}-intl \
-    php${PHP_VERSION}-fileinfo \
-    php${PHP_VERSION}-fpm \
-    php${PHP_VERSION}-gd \
-    php${PHP_VERSION}-mbstring \
-    php${PHP_VERSION}-mysqli \
-    php${PHP_VERSION}-pdo \
-    php${PHP_VERSION}-pdo_mysql \
-    php${PHP_VERSION}-phar \
-    php${PHP_VERSION}-posix \
-    php${PHP_VERSION}-session \
-    php${PHP_VERSION}-simplexml \
-    php${PHP_VERSION}-sodium \
-    php${PHP_VERSION}-tokenizer \
-    php${PHP_VERSION}-xml \
-    php${PHP_VERSION}-zip
-
-RUN ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm
-COPY --from=composer:latest  /usr/bin/composer /usr/bin/composer
-
+RUN         apk add --update --no-cache \
+            ca-certificates \
+            curl \
+            unzip \
+            tar \
+            git \
+            jq \
+            wget \
+            file
 # Esse codigo o Drylian me passou
-RUN apk add --no-cache fakeroot
-RUN echo "UTC" > /etc/timezone
+# Instala o bash
+RUN apk add --no-cache --upgrade bash
 
-COPY ./crontab_test.sh /
-RUN chmod 777 /crontab_test.sh
-
-USER container
-ENV  USER container
-ENV HOME /home/container
-
-WORKDIR /home/container
-
-COPY ./entrypoint.sh /entrypoint.sh
-
-CMD [ "bash", "/entrypoint.sh" ]
+# Remove o link simbólico para o shell padrão e cria um novo link simbólico para o bash
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
