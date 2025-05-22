@@ -1,5 +1,5 @@
 {
-  "name": "ashu_yolks",
+  "name": "slyvok",
   "version": "1.0.0",
   "description": "Returns only the paths that should be built",
   "main": "main/app.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Ashu11-A/Ashu_Yolks.git"
+    "url": "git+https://github.com/Slyvok/Yolks.git"
   },
   "author": "ashu11-a",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Ashu11-A/Ashu_Yolks/issues"
+    "url": "https://github.com/Slyvok/Yolks/issues"
   },
-  "homepage": "https://github.com/Ashu11-A/Ashu_Yolks#readme",
+  "homepage": "https://github.com/Slyvok/Yolks",
   "devDependencies": {
     "@eslint/js": "^9.8.0",
     "@types/node": "^22.1.0",

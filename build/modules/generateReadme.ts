@@ -9,7 +9,7 @@ export async function generate (id: string) {
   const cache = await exist('cache.build.json') ? JSON.parse(await readFile('cache.build.json', { encoding: 'utf-8' })) : {}
   const regex = /<!--start-docker-->[\s\S]*?<!--end-docker-->/g;
 
-  const request = await fetch(`https://api.github.com/repos/Ashu11-A/Ashu_Yolks/actions/runs/${id}/jobs`, { method: 'GET' })
+  const request = await fetch(`https://api.github.com/repos/Slyvok/Yolks/actions/runs/${id}/jobs`, { method: 'GET' })
   const builds = await request.json() as JobsData
   
   const dockers: Record<string, string[]> = cache
@@ -21,7 +21,7 @@ export async function generate (id: string) {
     const time = timestamp(job.started_at, job.completed_at)
     const sucess = job.conclusion === 'success' ? true : false
     const { type, tag, arch, path } = JSON.parse(job.name) as { type: string, tag: string, arch: string, path: string }
-    const text = `| [${tag}](https://github.com/Ashu11-A/Ashu_Yolks/tree/main/${path}) | ${arch.includes('amd') ? '✅' : '❌'} | ${arch.includes('arm') ? '✅' : '❌'} | ${sucess ? '✅' : '❌'} | ${time} | ghcr.io/ashu11-a/${type}:${tag}`
+    const text = `| [${tag}](https://github.com/Ashu11-A/Slyvok/Yolks/tree/main/${path}) | ${arch.includes('amd') ? '✅' : '❌'} | ${arch.includes('arm') ? '✅' : '❌'} | ${sucess ? '✅' : '❌'} | ${time} | ghcr.io/Slyvok/${type}:${tag}`
 
     if (!Array.isArray(dockers[type])) dockers[type] = []
     const index = dockers[type].findIndex((value) => value.includes(tag))
